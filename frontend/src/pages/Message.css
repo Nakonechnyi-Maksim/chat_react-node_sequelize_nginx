@@ -1,0 +1,30 @@
+.mainBlockMessage {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  background-color: aqua;
+  width: 85vw;
+  height: 100%;
+}
+
+.viewPortMessage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.displayMessage {
+  overflow: auto;
+  width: 70%;
+  height: 80vh;
+  padding: 15px;
+  background-color: antiquewhite;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.chatInput {
+  width: 40%;
+}
