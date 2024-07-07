@@ -1,13 +1,11 @@
 .msgWrapper {
   font-size: 1.5em;
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 500;
-  font-style: normal;
+  align-self: flex-end;
 }
 
 .msg {
   background-color: white;
-  width: 20vw;
+  max-width: 20vw;
   word-break: break-all;
   margin-bottom: 10px;
   padding: 5px;

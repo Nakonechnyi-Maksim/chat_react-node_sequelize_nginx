@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MessageWrapper from "../wrapper/MessageWrapper";
 
-import "./Message.css";
+import "./MessagePage.css";
 
 export default function Message() {
   const [val, setVal] = useState("");
@@ -20,7 +20,6 @@ export default function Message() {
 
   function handleChange(e) {
     setVal(e.target.value);
-    // console.log(val);
   }
 
   return (

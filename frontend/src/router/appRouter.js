@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import MainPage from "../pages/MainPage";
-import Message from "../pages/Message";
+import ProfilePage from "../pages/ProfilePage";
+import Message from "../pages/MessagePage";
 
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/main" element={<MainPage />} />
+      <Route path="/prof" element={<ProfilePage />} />
       <Route path="/msg" element={<Message />} />
     </Routes>
   );
