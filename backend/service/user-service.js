@@ -1,10 +1,15 @@
 const User = require("../models/users");
+const bcrypt = require("bcrypt");
 let response;
 
 class UserService {
   async createUser(username, email, password) {
     try {
-      const password_hash = password;
+      const candidate = await User.findOne({ where: { email } });
+      if (candidate) {
+        throw new Error(`А я тебя знаю, ${email} меняй мыло`);
+      }
+      const password_hash = await bcrypt.hash(password, 5);
       const user = await User.create({
         username,
         email,
