@@ -1,9 +1,15 @@
-const { User } = require("../models/users");
+const User = require("../models/users");
 
 class UserService {
   async createUser(username, email, password) {
     try {
-      const user = await User.create(UserData);
+      const password_hash = password;
+      const user = await User.create({
+        // user_id,
+        username,
+        email,
+        password_hash,
+      });
       console.log(user);
     } catch (error) {
       throw new Error(`Найди оишбку ${error.message}`);
@@ -11,4 +17,4 @@ class UserService {
   }
 }
 
-module.exports = UserService;
+module.exports = new UserService();
