@@ -6,9 +6,12 @@ class UserController {
       const { username, email, password } = req.body;
       console.log("Создание пользователя");
       const user = await userService.createUser(username, email, password);
+      return res.json(user);
     } catch (error) {
       console.error("Ошибка при создании пользователя ", error);
       next(error);
     }
   }
 }
+
+module.exports = new UserController();
