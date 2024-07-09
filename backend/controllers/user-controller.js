@@ -12,6 +12,16 @@ class UserController {
       next(error);
     }
   }
+
+  async getUser(req, res, next) {
+    try {
+      const users = await userService.getAllUsers();
+      return res.json(users);
+    } catch (error) {
+      console.error("Ошибка при получении всех пользователей", error);
+      next(error);
+    }
+  }
 }
 
 module.exports = new UserController();
