@@ -29,6 +29,10 @@ const User = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   { timestamps: false }
 );
