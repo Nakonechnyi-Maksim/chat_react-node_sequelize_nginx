@@ -3,9 +3,14 @@ const userService = require("../service/user-service");
 class UserController {
   async createUser(req, res, next) {
     try {
-      const { username, email, password } = req.body;
+      const { username, login, email, password } = req.body;
       console.log("Создание пользователя");
-      const user = await userService.createUser(username, email, password);
+      const user = await userService.createUser(
+        username,
+        login,
+        email,
+        password
+      );
       return res.json(user);
     } catch (error) {
       console.error("Ошибка при создании пользователя ", error);
@@ -13,7 +18,7 @@ class UserController {
     }
   }
 
-  async getUser(req, res, next) {
+  async getAllUsers(req, res, next) {
     try {
       const users = await userService.getAllUsers();
       return res.json(users);
