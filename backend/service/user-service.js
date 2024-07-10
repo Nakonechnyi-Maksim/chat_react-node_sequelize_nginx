@@ -22,8 +22,9 @@ class UserService {
   }
   async getAllUsers() {
     try {
-      response = await User.findAll({ attributes: ["username", "status"] });
-      return response;
+      response = await User.findAll();
+      const { username, status } = response;
+      return { username, status };
     } catch (error) {}
   }
 }
