@@ -1,14 +1,8 @@
 const User = require("../models/users");
 const Chats_members = require("../models/chats_members");
 const Chats = require("../models/chats");
-User.hasMany(Chats_members, {
-  foreignKey: "user_id", // Внешний ключ в таблице Order
-  sourceKey: "user_id", // Первичный ключ в таблице User
-});
-Chats_members.hasMany(Chats, {
-  foreignKey: "chat_id",
-  sourceKey: "chat_id",
-});
+User.belongsToMany(Chats, { through: Chats_members, foreignKey: "user_id" });
+Chats.belongsToMany(User, { through: Chats_members, foreignKey: "chat_id" });
 
 class ChatService {
   async createChat(user_id, chat_partner_id) {
