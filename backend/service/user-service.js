@@ -39,9 +39,9 @@ class UserService {
   }
   async login(email, password) {
     try {
-      const hashPassword = bcrypt.hash(password, 5);
+      const hashPassword = await bcrypt.hash(password, 5);
       const isAuthUser = await User.findOne({
-        where: { email, password: hashPassword },
+        where: { email, password_hash: hashPassword },
       });
       if (isAuthUser) {
         return true;
