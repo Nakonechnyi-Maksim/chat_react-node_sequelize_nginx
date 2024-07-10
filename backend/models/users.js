@@ -1,5 +1,5 @@
 const sequelize = require("../db");
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 
 const User = sequelize.define(
   "users",
@@ -28,6 +28,7 @@ const User = sequelize.define(
     created_at: {
       type: DataTypes.DATE,
       allowNull: true,
+      defaultValue: Sequelize.NOW,
     },
     last_login: {
       type: DataTypes.DATE,
