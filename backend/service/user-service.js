@@ -17,6 +17,7 @@ class UserService {
         );
       }
       const password_hash = await bcrypt.hash(password, 5);
+      const created_at = getCurrentFormattedTime();
       const user = await User.create({
         username,
         email,
