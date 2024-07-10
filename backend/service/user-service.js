@@ -39,9 +39,11 @@ class UserService {
   }
   async login(email, password) {
     try {
-      const { password_hash } = await User.findOne({ where: { email } });
-      const checkPassword = await bcrypt.compare(password, password_hash);
-      return checkPassword;
+      if (User.findOne({ where: { email } })) {
+        const { password_hash } = await User.findOne({ where: { email } });
+        const checkPassword = await bcrypt.compare(password, password_hash);
+        return checkPassword;
+      } else return false;
     } catch (error) {
       throw new Error(`Ошибка при входе: ${error}`);
     }

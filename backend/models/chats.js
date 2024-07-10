@@ -1,5 +1,5 @@
 const sequelize = require("../db");
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 
 const Chat = sequelize.define("chats", {
   chat_id: {
@@ -19,10 +19,12 @@ const Chat = sequelize.define("chats", {
   created_at: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: Sequelize.NOW,
   },
   update_at: {
     type: DataTypes.DATE,
     allowNull: true,
+    defaultValue: Sequelize.NOW,
   },
 });
 
