@@ -17,7 +17,6 @@ class UserService {
         );
       }
       const password_hash = await bcrypt.hash(password, 5);
-      const created_at = getCurrentFormattedTime();
       const user = await User.create({
         username,
         email,
@@ -26,7 +25,7 @@ class UserService {
       });
       console.log(user);
     } catch (error) {
-      throw new Error(`Найди оишбку ${error.message}`);
+      throw new Error(`Ошибка при создании пользователя: ${error.message}`);
     }
   }
   async getAllUsers() {
@@ -34,7 +33,22 @@ class UserService {
       response = await User.findAll();
       const { username, status } = response;
       return { username, status };
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(`Ошибка при получении пользователей: ${error}`);
+    }
+  }
+  async login(email, password) {
+    try {
+      const hashPassword = bcrypt.hash(password, 5);
+      const isAuthUser = await User.findOne({
+        where: { email, password: hashPassword },
+      });
+      if (isAuthUser) {
+        return true;
+      } else return false;
+    } catch (error) {
+      throw new Error(`Ошибка при входе: ${error}`);
+    }
   }
 }
 
