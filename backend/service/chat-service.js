@@ -1,8 +1,4 @@
-const User = require("../models/users");
-const Chats_members = require("../models/chats_members");
-const Chats = require("../models/chats");
-User.belongsToMany(Chats, { through: Chats_members, foreignKey: "user_id" });
-Chats.belongsToMany(User, { through: Chats_members, foreignKey: "chat_id" });
+const { Chats, Chats_members } = require("../models/associations");
 
 class ChatService {
   async createChat(user_id, chat_partner_id) {
@@ -12,17 +8,14 @@ class ChatService {
         chat_name: "Личный",
         chat_type: "Личный",
       });
-      // console.log(typeof +user_id);
-      // console.log(typeof +chat_partner_id);
-      // console.log("Проверка ", chat);
       const chat_id = chat.chat_id;
       const chatMembers = await Chats_members.bulkCreate([
         { chat_id: chat_id, user_id: +user_id },
         { chat_id: chat_id, user_id: +chat_partner_id },
       ]);
-      // console.log(chat, "\n", chatMembers);
+      return true;
     } catch (error) {
-      throw new Error("PIZDEC ", error);
+      throw new Error("Ошибка сервиса при создании чата: ", error);
     }
   }
 }

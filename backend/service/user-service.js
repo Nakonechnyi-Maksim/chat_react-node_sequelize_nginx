@@ -1,12 +1,12 @@
-const User = require("../models/users");
+const { Users } = require("../models/associations");
 const bcrypt = require("bcrypt");
 let response;
 
 class UserService {
   async createUser(username, login, email, password) {
     try {
-      const candidateLogin = await User.findOne({ where: { login } });
-      const candidateEmail = await User.findOne({ where: { email } });
+      const candidateLogin = await Users.findOne({ where: { login } });
+      const candidateEmail = await Users.findOne({ where: { email } });
       if (candidateEmail && candidateLogin) {
         throw new Error(`Ну ты ку-ку?`);
       } else if (candidateEmail) {
@@ -17,7 +17,7 @@ class UserService {
         );
       }
       const password_hash = await bcrypt.hash(password, 5);
-      const user = await User.create({
+      const user = await Users.create({
         username,
         email,
         login,
@@ -30,7 +30,7 @@ class UserService {
   }
   async getAllUsers() {
     try {
-      response = await User.findAll();
+      response = await Users.findAll();
       const { username, status } = response;
       return { username, status };
     } catch (error) {
@@ -39,8 +39,8 @@ class UserService {
   }
   async login(email, password) {
     try {
-      if (User.findOne({ where: { email } })) {
-        const { password_hash } = await User.findOne({ where: { email } });
+      if (Users.findOne({ where: { email } })) {
+        const { password_hash } = await Users.findOne({ where: { email } });
         const checkPassword = await bcrypt.compare(password, password_hash);
         return checkPassword;
       } else return false;

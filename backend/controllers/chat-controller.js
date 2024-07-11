@@ -8,7 +8,7 @@ class ChatController {
       const chat = await chatService.createChat(user_id, chat_partner_id);
       return res.json(chat);
     } catch (error) {
-      console.error("Ошибка при создании чата: ", error);
+      console.error("Ошибка контроллера при создании чата: ", error);
       next(error);
     }
   }
