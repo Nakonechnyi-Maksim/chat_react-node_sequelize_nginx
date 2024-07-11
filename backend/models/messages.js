@@ -1,5 +1,5 @@
 const sequelize = require("../db");
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 
 const Message = sequelize.define(
   "messages",
@@ -26,13 +26,14 @@ const Message = sequelize.define(
         key: "user_id",
       },
     },
-    mcontent: {
+    content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     sent_at: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: Sequelize.NOW,
     },
     status: {
       type: DataTypes.STRING,
