@@ -8,6 +8,7 @@ const Chat = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
     },
     chat_name: {
       type: DataTypes.STRING,
