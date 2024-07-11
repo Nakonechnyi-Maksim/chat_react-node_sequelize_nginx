@@ -8,25 +8,26 @@ const Chat = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false,
     },
     chat_name: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "Личный диалог",
     },
     chat_type: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "Личный диалог",
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      allowNull: true,
+      // defaultValue: Sequelize.NOW,
     },
     update_at: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: Sequelize.NOW,
+      // defaultValue: Sequelize.NOW,
     },
   },
   { timestamps: false }
