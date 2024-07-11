@@ -13,6 +13,12 @@ class MessageService {
       throw new Error("Ошибка при отправке сообщения: ", error);
     }
   }
+  async showMessages(chat_id) {
+    try {
+      const dialogue = await Message.findAll({ where: { chat_id } });
+      return dialogue;
+    } catch (error) {}
+  }
 }
 
 module.exports = new MessageService();

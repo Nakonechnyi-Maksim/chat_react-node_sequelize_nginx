@@ -15,6 +15,16 @@ class MessageController {
       next(error);
     }
   }
+  async showMessages(req, res, next) {
+    try {
+      const { chat_id } = req.body;
+      const message = await MessageService.showMessages(chat_id);
+      return res.json(message);
+    } catch (error) {
+      console.error("Ошибка при получении диалога");
+      next(error);
+    }
+  }
 }
 
 module.exports = new MessageController();

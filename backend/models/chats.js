@@ -22,12 +22,12 @@ const Chat = sequelize.define(
     created_at: {
       type: DataTypes.DATE,
       allowNull: true,
-      // defaultValue: Sequelize.NOW,
+      defaultValue: Sequelize.NOW,
     },
     update_at: {
       type: DataTypes.DATE,
       allowNull: true,
-      // defaultValue: Sequelize.NOW,
+      defaultValue: Sequelize.NOW,
     },
   },
   { timestamps: false }
