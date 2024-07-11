@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import MessageWrapper from "../wrapper/MessageWrapper";
 
 import "./MessagePage.css";
@@ -6,6 +6,11 @@ import "./MessagePage.css";
 export default function Message() {
   const [val, setVal] = useState("");
   const [msgs, setMsgs] = useState([]);
+  const lastRef = useRef(null);
+
+  useEffect(() => {
+    lastRef.current?.lastElementChild?.scrollIntoView();
+  }, [msgs]);
 
   function displayMessage(msg) {
     setMsgs([...msgs, msg]);
@@ -25,7 +30,7 @@ export default function Message() {
   return (
     <div className="mainBlockMessage">
       <div className="viewPortMessage">
-        <div className="displayMessage">
+        <div ref={lastRef} className="displayMessage">
           {msgs.map((el) => (
             <MessageWrapper>{el}</MessageWrapper>
           ))}
