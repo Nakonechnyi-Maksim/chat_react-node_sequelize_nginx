@@ -9,22 +9,18 @@ class ChatService {
     try {
       console.log("Вошли");
       const chat = await Chats.create({
-        chat_name: "Личный диалог",
-        chat_type: "Личный диалог",
+        chat_name: "Личный",
+        chat_type: "Личный",
       });
-      console.log("Проверка ", chat);
+      // console.log(typeof +user_id);
+      // console.log(typeof +chat_partner_id);
+      // console.log("Проверка ", chat);
       const chat_id = chat.chat_id;
-      const chatFirstMember = await Chats_members.create({
-        chat_id: chat_id,
-        user_id: user_id,
-      });
-      console.log("Проверка ", chatFirstMember);
-      const chatSecondMember = await Chats_members.create({
-        chat_id: chat_id,
-        user_id: chat_partner_id,
-      });
-      console.log("Проверка ", chatSecondMember);
-      console.log(chat, "\n", chatFirstMember, "\n", chatSecondMember);
+      const chatMembers = await Chats_members.bulkCreate([
+        { chat_id: chat_id, user_id: +user_id },
+        { chat_id: chat_id, user_id: +chat_partner_id },
+      ]);
+      // console.log(chat, "\n", chatMembers);
     } catch (error) {
       throw new Error("PIZDEC ", error);
     }

@@ -12,7 +12,7 @@ const Chats_members = sequelize.define(
     },
     chat_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: "chats",
         key: "chat_id",
@@ -20,7 +20,7 @@ const Chats_members = sequelize.define(
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: "users",
         key: "user_id",
