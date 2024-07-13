@@ -26,7 +26,7 @@ const Message = sequelize.define(
         key: "user_id",
       },
     },
-    content: {
+    mcontent: {
       type: DataTypes.STRING,
       allowNull: false,
     },

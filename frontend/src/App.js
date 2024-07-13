@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import RegPage from "./pages/RegPage";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(true);
   return (
     <Router>
       {isAuth ? (

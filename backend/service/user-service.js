@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Users } = require("../models/associations");
 const bcrypt = require("bcrypt");
 let response;
@@ -24,15 +25,26 @@ class UserService {
         password_hash,
       });
       console.log(user);
+      return true;
     } catch (error) {
       throw new Error(`Ошибка при создании пользователя: ${error.message}`);
     }
   }
   async getAllUsers() {
     try {
-      response = await Users.findAll();
-      const { username, status } = response;
-      return { username, status };
+      response = await Users.findAll({
+        where: {
+          status: {
+            [Op.ne]: null,
+          },
+        },
+      });
+      const users = response.map((user) => ({
+        id: user.user_id,
+        username: user.username,
+        status: user.status,
+      }));
+      return users;
     } catch (error) {
       throw new Error(`Ошибка при получении пользователей: ${error}`);
     }

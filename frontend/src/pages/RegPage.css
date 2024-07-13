@@ -23,7 +23,9 @@ h1 {
 }
 
 .inputEmail,
-.inputPass {
+.inputPass,
+.inputLogin,
+.inputUsername {
   background: none;
   outline: none;
   border-radius: 8px;

@@ -1,13 +1,30 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import MessageWrapper from "../wrapper/MessageWrapper";
+import ChatContext from "../context/ChatContext";
 
 import "./MessagePage.css";
 
 export default function Message() {
+  const chat_id = useContext(ChatContext);
+  const reqBody = JSON.stringify({
+    chat_id: chat_id.selectedChatId,
+  });
   const [val, setVal] = useState("");
   const [msgs, setMsgs] = useState([]);
   const lastRef = useRef(null);
-
+  useEffect(() => {
+    (async function getAllMessage() {
+      const req = await fetch("http://176.100.124.148:5000/api/show-dialogue", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: reqBody,
+      });
+      const res = await req.json();
+      setMsgs(res);
+    })();
+  }, [reqBody]);
   useEffect(() => {
     lastRef.current?.lastElementChild?.scrollIntoView();
   }, [msgs]);
@@ -32,7 +49,7 @@ export default function Message() {
       <div className="viewPortMessage">
         <div ref={lastRef} className="displayMessage">
           {msgs.map((el) => (
-            <MessageWrapper>{el}</MessageWrapper>
+            <MessageWrapper>{el.mcontent}</MessageWrapper>
           ))}
         </div>
         <input
