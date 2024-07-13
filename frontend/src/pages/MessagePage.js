@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import MessageWrapper from "../wrapper/MessageWrapper";
 import ChatContext from "../context/ChatContext";
+import UserContext from "../context/UserContext";
 
 import "./MessagePage.css";
 
 export default function Message() {
   const chat_id = useContext(ChatContext);
+  const { user } = useContext(UserContext);
+  console.log(user);
   const reqBody = JSON.stringify({
     chat_id: chat_id.selectedChatId,
   });
@@ -49,7 +52,7 @@ export default function Message() {
       <div className="viewPortMessage">
         <div ref={lastRef} className="displayMessage">
           {msgs.map((el) => (
-            <MessageWrapper>{el.mcontent}</MessageWrapper>
+            <MessageWrapper children={el.mcontent} whoSent={el.sender_id} />
           ))}
         </div>
         <input
