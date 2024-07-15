@@ -16,19 +16,17 @@ export default function Message() {
   const [msgs, setMsgs] = useState([]);
   const lastRef = useRef(null);
 
-  useEffect(() => {
-    (async () => {
-      const req = await fetch("http://176.100.124.148:5000/api/show-dialogue", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: reqBody,
-      });
-      const res = await req.json();
-      setMsgs(res);
-    })();
-  }, [reqBody]);
+  async function getAllMsgs() {
+    const req = await fetch("http://176.100.124.148:5000/api/show-dialogue", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: reqBody,
+    });
+    const res = await req.json();
+    setMsgs(res);
+  }
 
   async function createMessage() {}
 
