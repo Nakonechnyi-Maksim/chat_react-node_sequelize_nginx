@@ -13,7 +13,7 @@ export default function SideBar() {
       setUsers(res);
     })();
   }, []);
-  // Тудушечка - разобраться с Link (почему при перезагрузке не передается chat_id)
+  // Тудушечка - Разобраться с сохранением состояния после перезагрузки
   return (
     <>
       <div className="mainBlockSideBar">

@@ -6,15 +6,24 @@ import UserContext from "../context/UserContext";
 import "./MessagePage.css";
 
 export default function Message() {
-  const chat_id = useContext(ChatContext);
+  const { selectedChatId } = useContext(ChatContext);
   const { user } = useContext(UserContext);
-  console.log(user.user_id);
   const reqBody = JSON.stringify({
-    chat_id: chat_id.selectedChatId,
+    chat_id: selectedChatId,
   });
   const [val, setVal] = useState("");
   const [msgs, setMsgs] = useState([]);
   const lastRef = useRef(null);
+
+  useEffect(() => {
+    lastRef.current?.lastElementChild?.scrollIntoView();
+  }, [msgs]);
+
+  useEffect(() => {
+    if (selectedChatId) {
+      getAllMsgs();
+    }
+  }, [selectedChatId]);
 
   async function getAllMsgs() {
     const req = await fetch("http://176.100.124.148:5000/api/show-dialogue", {
@@ -28,16 +37,10 @@ export default function Message() {
     setMsgs(res);
   }
 
-  async function createMessage() {}
-
-  useEffect(() => {
-    lastRef.current?.lastElementChild?.scrollIntoView();
-  }, [msgs]);
-
   async function createMessage() {
     const reqBody = JSON.stringify({
-      chat_id: 1,
-      sender_id: 1,
+      chat_id: selectedChatId,
+      sender_id: user.user_id,
       content: val,
     });
     const req = await fetch("http://176.100.124.148:5000/api/create-message", {
@@ -49,16 +52,17 @@ export default function Message() {
     });
     const res = await req.json();
     setMsgs(res);
+    getAllMsgs();
   }
 
   function displayMessage(msg) {
     setMsgs([...msgs, msg]);
   }
 
-  function handleKeyDown(event) {
+  async function handleKeyDown(event) {
     if (event.key === "Enter") {
+      await createMessage();
       displayMessage(val);
-      createMessage();
       setVal("");
     }
   }
