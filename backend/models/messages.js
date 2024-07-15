@@ -38,6 +38,7 @@ const Message = sequelize.define(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "Отправлено",
     },
   },
   { timestamps: false }

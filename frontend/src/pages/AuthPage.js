@@ -9,7 +9,7 @@ export default function AuthPage() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isRegUser, setIsRegUser] = useState(true);
-
+  // Тудушечка - Подумать как можно вынести в отдельную функцию следующие две функции
   async function regUser() {
     const reqBody = JSON.stringify({ username, email, login, password });
     const req = await fetch("http://176.100.124.148:5000/api/reg", {
@@ -56,7 +56,7 @@ export default function AuthPage() {
   async function newUser() {
     setIsRegUser(!isRegUser);
   }
-
+  // Тудушечка - Вынести в отдельные компоненты регистрацию/авторизацию
   return isRegUser ? (
     <div className="mainAuthBlock">
       <div className="authWrapper">

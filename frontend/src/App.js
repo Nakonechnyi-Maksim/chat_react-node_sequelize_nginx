@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import AppRouter from "./router/appRouter";
 import Layout from "./Layout";
 import RegPage from "./pages/AuthPage";

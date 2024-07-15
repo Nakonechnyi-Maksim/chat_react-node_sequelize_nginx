@@ -8,15 +8,16 @@ import "./MessagePage.css";
 export default function Message() {
   const chat_id = useContext(ChatContext);
   const { user } = useContext(UserContext);
-  console.log(user);
+  console.log(user.user_id);
   const reqBody = JSON.stringify({
     chat_id: chat_id.selectedChatId,
   });
   const [val, setVal] = useState("");
   const [msgs, setMsgs] = useState([]);
   const lastRef = useRef(null);
+
   useEffect(() => {
-    (async function getAllMessage() {
+    (async () => {
       const req = await fetch("http://176.100.124.148:5000/api/show-dialogue", {
         method: "POST",
         headers: {
@@ -28,6 +29,9 @@ export default function Message() {
       setMsgs(res);
     })();
   }, [reqBody]);
+
+  async function createMessage() {}
+
   useEffect(() => {
     lastRef.current?.lastElementChild?.scrollIntoView();
   }, [msgs]);

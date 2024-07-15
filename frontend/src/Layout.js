@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./Layout.css";
 
 export default function Layout({ children }) {
-  const [selectedChatId, setSelectedChatId] = useState({});
+  const [selectedChatId, setSelectedChatId] = useState(null);
   return (
     <ChatContext.Provider value={{ selectedChatId, setSelectedChatId }}>
       <div className="layout">

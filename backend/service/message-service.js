@@ -8,7 +8,7 @@ class MessageService {
         sender_id,
         mcontent,
       });
-      return true;
+      return { msg: "Сообщение отправлено" };
     } catch (error) {
       throw new Error("Ошибка при отправке сообщения: ", error);
     }

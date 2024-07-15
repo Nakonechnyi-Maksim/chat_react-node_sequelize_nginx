@@ -18,14 +18,13 @@ class UserService {
         );
       }
       const password_hash = await bcrypt.hash(password, 5);
-      const user = await Users.create({
+      await Users.create({
         username,
         email,
         login,
         password_hash,
       });
-      console.log(user);
-      return true;
+      return { msg: "Пользователь успешно создан" };
     } catch (error) {
       throw new Error(`Ошибка при создании пользователя: ${error.message}`);
     }
@@ -52,9 +51,14 @@ class UserService {
   async login(email, password) {
     try {
       if (Users.findOne({ where: { email } })) {
-        const { password_hash } = await Users.findOne({ where: { email } });
+        const { user_id, password_hash } = await Users.findOne({
+          where: { email },
+        });
         const checkPassword = await bcrypt.compare(password, password_hash);
-        return checkPassword;
+        if (checkPassword) {
+          return { user_id: user_id };
+        }
+        return { msg: "Неверный пароль" };
       } else return false;
     } catch (error) {
       throw new Error(`Ошибка при входе: ${error}`);
