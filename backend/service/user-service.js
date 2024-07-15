@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { Users } = require("../models/associations");
 const bcrypt = require("bcrypt");
+const tokenService = require("./token-service");
 let response;
 
 class UserService {
@@ -24,7 +25,10 @@ class UserService {
         login,
         password_hash,
       });
-      return { msg: "Пользователь успешно создан" };
+      const { user_id } = user;
+      const tokens = tokenService.generateToken(user_id);
+      await tokenService.saveToken(user_id, tokens.refreshToken);
+      return { ...tokens, user_id };
     } catch (error) {
       throw new Error(`Ошибка при создании пользователя: ${error.message}`);
     }
@@ -55,10 +59,7 @@ class UserService {
           where: { email },
         });
         const checkPassword = await bcrypt.compare(password, password_hash);
-        if (checkPassword) {
-          return { user_id: user_id };
-        }
-        return { msg: "Неверный пароль" };
+        return checkPassword;
       } else return false;
     } catch (error) {
       throw new Error(`Ошибка при входе: ${error}`);
