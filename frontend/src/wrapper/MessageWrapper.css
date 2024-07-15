@@ -3,6 +3,8 @@
   align-self: flex-end;
 }
 
+.whoSent {
+}
 .msg {
   background-color: white;
   max-width: 25vw;

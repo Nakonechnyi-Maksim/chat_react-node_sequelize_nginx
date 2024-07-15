@@ -1,12 +1,12 @@
-const Message = require("../models/messages");
+const { Messages } = require("../models/associations");
 
 class MessageService {
-  async createMessage(chat_id, sender_id, content) {
+  async createMessage(chat_id, sender_id, mcontent) {
     try {
-      const message = await Message.create({
+      await Messages.create({
         chat_id,
         sender_id,
-        content,
+        mcontent,
       });
       return true;
     } catch (error) {
@@ -15,9 +15,11 @@ class MessageService {
   }
   async showMessages(chat_id) {
     try {
-      const dialogue = await Message.findAll({ where: { chat_id } });
+      const dialogue = await Messages.findAll({ where: { chat_id } });
       return dialogue;
-    } catch (error) {}
+    } catch (error) {
+      throw new Error("Ошибка при получении диалога: ", error);
+    }
   }
 }
 
