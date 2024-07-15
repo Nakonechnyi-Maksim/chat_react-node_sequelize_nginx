@@ -32,6 +32,23 @@ export default function Message() {
     lastRef.current?.lastElementChild?.scrollIntoView();
   }, [msgs]);
 
+  async function createMessage() {
+    const reqBody = JSON.stringify({
+      chat_id: 1,
+      sender_id: 1,
+      content: val,
+    });
+    const req = await fetch("http://176.100.124.148:5000/api/create-message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: reqBody,
+    });
+    const res = await req.json();
+    setMsgs(res);
+  }
+
   function displayMessage(msg) {
     setMsgs([...msgs, msg]);
   }
@@ -39,6 +56,7 @@ export default function Message() {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       displayMessage(val);
+      createMessage();
       setVal("");
     }
   }
