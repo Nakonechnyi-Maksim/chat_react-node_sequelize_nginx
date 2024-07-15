@@ -9,6 +9,6 @@ router.get("/allUsers", UserController.getAllUsers);
 router.post("/login", UserController.login);
 router.post("/create-chat", ChatController.createChat);
 router.post("/create-message", MessageController.createMessage);
-router.get("/show-dialogue", MessageController.showMessages);
+router.post("/show-dialogue", MessageController.showMessages);
 
 module.exports = router;
