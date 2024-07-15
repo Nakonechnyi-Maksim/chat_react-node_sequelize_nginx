@@ -19,7 +19,7 @@ class UserService {
         );
       }
       const password_hash = await bcrypt.hash(password, 5);
-      await Users.create({
+      const user = await Users.create({
         username,
         email,
         login,
@@ -55,12 +55,18 @@ class UserService {
   async login(email, password) {
     try {
       if (Users.findOne({ where: { email } })) {
-        const { user_id, password_hash } = await Users.findOne({
-          where: { email },
-        });
+        const { password_hash } = await Users.findOne({ where: { email } });
         const checkPassword = await bcrypt.compare(password, password_hash);
-        return checkPassword;
-      } else return false;
+        if (checkPassword) {
+          const tokens = tokenService.generateToken(user_id);
+          await tokenService.saveToken(user_id, tokens.refreshToken);
+          return { ...tokens, user_id };
+        } else {
+          return { message: "Неправильный пароль" };
+        }
+      } else {
+        return { message: "Пользователя с такой почтой нет" };
+      }
     } catch (error) {
       throw new Error(`Ошибка при входе: ${error}`);
     }
