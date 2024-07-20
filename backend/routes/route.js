@@ -10,7 +10,7 @@ router.post("/login", UserController.login);
 router.post("/create-chat", AuthMiddleware, ChatController.createChat);
 router.post("/create-message", AuthMiddleware, MessageController.createMessage);
 router.post("/show-dialogue", AuthMiddleware, MessageController.showMessages);
-router.post("/refresh", UserController.refresh);
+router.get("/refresh", UserController.refresh);
 router.get("/allUsers", AuthMiddleware, UserController.getAllUsers);
 
 module.exports = router;

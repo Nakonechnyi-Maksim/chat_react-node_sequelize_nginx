@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 const { Users } = require("../models/associations");
 
@@ -35,21 +34,12 @@ class TokenService {
     const tokenData = await Users.findOne({
       where: { user_id },
     });
-
-    if (tokenData.refreshtoken) {
+    if (tokenData) {
       tokenData.refreshtoken = refreshtoken;
-      return tokenData.save();
+      await tokenData.save();
+      return;
     }
-
-    const [updateToken] = await Users.update(
-      { refreshtoken },
-      { where: user_id }
-    );
-    if (updateToken === 0) {
-      console.log("No token update");
-    } else {
-      console.log("User token update successfully");
-    }
+    await Users.update({ refreshtoken }, { where: user_id });
   }
   async removetoken(refreshtoken) {
     const [removedToken] = await Users.update(
@@ -64,7 +54,7 @@ class TokenService {
   }
   async findToken(refreshtoken) {
     const userData = await Users.findOne({ where: { refreshtoken } });
-    return { data: userData.refreshtoken };
+    return userData ? userData.refreshtoken : null;
   }
 }
 

@@ -3,11 +3,18 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./db");
 const router = require("./routes/route");
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = process.env.SEQ_PORT;
 
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use("/api", router);
 
 const start = async () => {

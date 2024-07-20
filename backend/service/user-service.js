@@ -3,6 +3,7 @@ const { Users } = require("../models/associations");
 const bcrypt = require("bcrypt");
 const tokenService = require("./token-service");
 const UserDto = require("../DTO/UserDto");
+const ApiError = require("../exceptions/api-errors");
 let response;
 
 class UserService {
@@ -27,8 +28,11 @@ class UserService {
           password_hash,
         });
         const userDto = new UserDto(user);
+        // console.log({ ...userDto });
         const tokens = tokenService.generateToken({ ...userDto });
+        console.log("Токен ", tokens);
         await tokenService.saveToken(userDto.user_id, tokens.refreshtoken);
+        console.log("Сохранили токены");
         return { ...tokens, user: userDto };
       }
     } catch (error) {
@@ -64,7 +68,7 @@ class UserService {
           const userDto = new UserDto(user);
           const tokens = tokenService.generateToken({ ...userDto });
           await tokenService.saveToken(userDto.user_id, tokens.refreshtoken);
-          return { ...tokens, user_id };
+          return { ...tokens, user: userDto.user_id };
         } else {
           return { message: "Неправильный пароль" };
         }
@@ -88,7 +92,7 @@ class UserService {
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
     }
-    const user = await userModel.findByPk(userData.id);
+    const user = await Users.findByPk(userData.user_id);
     const userDto = new UserDto(user);
     const tokens = tokenService.generateToken({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refreshToken);

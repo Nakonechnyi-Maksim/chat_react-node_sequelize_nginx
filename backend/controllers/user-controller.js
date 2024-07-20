@@ -14,6 +14,8 @@ class UserController {
       res.cookie("refreshtoken", user.refreshtoken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        sameSite: "lax", // практические тоже самое для чего нужен cors
+        secure: false, // true - https
       });
       return res.json(user);
     } catch (error) {
@@ -26,6 +28,14 @@ class UserController {
     try {
       const { email, password } = req.body;
       const checkAuth = await userService.login(email, password);
+      if (checkAuth.refreshtoken) {
+        res.cookie("refreshtoken", checkAuth.refreshtoken, {
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+          httpOnly: true,
+          sameSite: "lax", // практические тоже самое для чего нужен cors
+          secure: false, // true - https
+        });
+      }
       return res.json(checkAuth);
     } catch (error) {
       console.error("Ошибка при авторизации пользователя: ", error);
@@ -51,6 +61,8 @@ class UserController {
       res.cookie("refreshtoken", userData.refreshtoken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        sameSite: "lax", // практические тоже самое для чего нужен cors
+        secure: false, // true - https
       });
       return res.json(userData);
     } catch (error) {
