@@ -3,7 +3,7 @@ import "./AuthPage.css";
 import UserContext from "../context/UserContext";
 
 export default function AuthPage() {
-  const { setUser, setIsAuth } = useContext(UserContext);
+  const { setUser, isAuth, setIsAuth } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState("");
@@ -22,7 +22,10 @@ export default function AuthPage() {
     const res = await req.json();
     if (res) {
       setUser(res);
-      setIsAuth(true);
+      setIsAuth({
+        refreshToken: res.refreshtoken,
+        accessToken: res.accessToken,
+      });
       console.warn("Пользователь успешно зарегестрирован ", res);
     } else {
       console.warn(
@@ -39,16 +42,20 @@ export default function AuthPage() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: reqBody,
     });
     const res = await req.json();
     if (res) {
       setUser(res);
-      setIsAuth(true);
+      setIsAuth({
+        refreshToken: res.refreshtoken,
+        accessToken: res.accessToken,
+      });
       console.warn("Пользователь успешно авторизован ", res);
     } else {
       console.warn(
-        "Произошла ошибка при регистрации пользователя: ",
+        "Произошла ошибка при авторизации пользователя: ",
         res.error
       );
     }

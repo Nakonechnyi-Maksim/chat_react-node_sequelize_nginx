@@ -19,8 +19,8 @@ function App() {
 
 const AppContent = () => {
   const { isAuth } = useContext(UserContext);
-
-  return isAuth ? (
+  // console.warn(isAuth.refreshToken);
+  return isAuth.refreshToken ? (
     <Layout>
       <AppRouter />
     </Layout>

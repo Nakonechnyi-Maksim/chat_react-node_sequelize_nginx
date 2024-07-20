@@ -7,7 +7,7 @@ import "./MessagePage.css";
 
 export default function Message() {
   const { selectedChatId } = useContext(ChatContext);
-  const { user } = useContext(UserContext);
+  const { isAuth } = useContext(UserContext);
   const reqBody = JSON.stringify({
     chat_id: selectedChatId,
   });
@@ -30,6 +30,7 @@ export default function Message() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${isAuth.accessToken}`,
       },
       body: reqBody,
     });
@@ -40,7 +41,7 @@ export default function Message() {
   async function createMessage() {
     const reqBody = JSON.stringify({
       chat_id: selectedChatId,
-      sender_id: user.user_id,
+      sender_id: isAuth.user_id,
       content: val,
     });
     const req = await fetch("http://176.100.124.148:5000/api/create-message", {

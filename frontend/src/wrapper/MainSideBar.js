@@ -2,17 +2,26 @@ import "./MainSideBar.css";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import ChatContext from "../context/ChatContext";
+import UserContext from "../context/UserContext";
 
 export default function SideBar() {
   const [users, setUsers] = useState([]);
+  const { isAuth } = useContext(UserContext);
   const { setSelectedChatId } = useContext(ChatContext);
   useEffect(() => {
     (async function getUsers() {
-      const req = await fetch("http://176.100.124.148:5000/api/allUsers");
+      const req = await fetch("http://176.100.124.148:5000/api/allUsers", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${isAuth.accessToken}`,
+        },
+        credentials: "include",
+      });
       const res = await req.json();
       setUsers(res);
     })();
-  }, []);
+  }, [isAuth.accessToken]);
   // Тудушечка - Разобраться с сохранением состояния после перезагрузки
   return (
     <>
