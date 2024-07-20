@@ -7,10 +7,10 @@ class TokenService {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
       expiresIn: "15m",
     });
-    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
+    const refreshtoken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
       expiresIn: "30d",
     });
-    return { accessToken, refreshToken };
+    return { accessToken, refreshtoken };
   }
 
   validateAccessToken(token) {
@@ -31,18 +31,18 @@ class TokenService {
     }
   }
 
-  async saveToken(user_id, refreshToken) {
+  async saveToken(user_id, refreshtoken) {
     const tokenData = await Users.findOne({
       where: { user_id },
     });
 
-    if (tokenData.refreshToken) {
-      tokenData.refreshToken = refreshToken;
+    if (tokenData.refreshtoken) {
+      tokenData.refreshtoken = refreshtoken;
       return tokenData.save();
     }
 
     const [updateToken] = await Users.update(
-      { refreshToken },
+      { refreshtoken },
       { where: user_id }
     );
     if (updateToken === 0) {
@@ -51,10 +51,10 @@ class TokenService {
       console.log("User token update successfully");
     }
   }
-  async removeToken(refreshToken) {
+  async removetoken(refreshtoken) {
     const [removedToken] = await Users.update(
-      { refreshToken: null },
-      { where: { refreshToken } }
+      { refreshtoken: null },
+      { where: { refreshtoken } }
     );
     if (removedToken === 0) {
       console.log("No token deleted");
@@ -62,9 +62,9 @@ class TokenService {
       console.log("User token delete successfully");
     }
   }
-  async findToken(refreshToken) {
-    const userData = await Users.findOne({ where: { refreshToken } });
-    return { data: userData.refreshToken };
+  async findToken(refreshtoken) {
+    const userData = await Users.findOne({ where: { refreshtoken } });
+    return { data: userData.refreshtoken };
   }
 }
 

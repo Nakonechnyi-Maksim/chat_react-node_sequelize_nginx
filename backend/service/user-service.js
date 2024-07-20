@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const { Users } = require("../models/associations");
 const bcrypt = require("bcrypt");
 const tokenService = require("./token-service");
+const UserDto = require("../DTO/UserDto");
 let response;
 
 class UserService {
@@ -17,18 +18,19 @@ class UserService {
         throw new Error(
           `Пользователь с данным логином: ${login} уже зарегестрирован! `
         );
+      } else {
+        const password_hash = await bcrypt.hash(password, 5);
+        const user = await Users.create({
+          username,
+          email,
+          login,
+          password_hash,
+        });
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateToken({ ...userDto });
+        await tokenService.saveToken(userDto.user_id, tokens.refreshtoken);
+        return { ...tokens, user: userDto };
       }
-      const password_hash = await bcrypt.hash(password, 5);
-      const user = await Users.create({
-        username,
-        email,
-        login,
-        password_hash,
-      });
-      const { user_id } = user;
-      const tokens = tokenService.generateToken(user_id);
-      await tokenService.saveToken(user_id, tokens.refreshToken);
-      return { ...tokens, user_id };
     } catch (error) {
       throw new Error(`Ошибка при создании пользователя: ${error.message}`);
     }
@@ -53,13 +55,15 @@ class UserService {
     }
   }
   async login(email, password) {
+    const user = await Users.findOne({ where: { email } });
     try {
-      if (Users.findOne({ where: { email } })) {
+      if (user) {
         const { password_hash } = await Users.findOne({ where: { email } });
         const checkPassword = await bcrypt.compare(password, password_hash);
         if (checkPassword) {
-          const tokens = tokenService.generateToken(user_id);
-          await tokenService.saveToken(user_id, tokens.refreshToken);
+          const userDto = new UserDto(user);
+          const tokens = tokenService.generateToken({ ...userDto });
+          await tokenService.saveToken(userDto.user_id, tokens.refreshtoken);
           return { ...tokens, user_id };
         } else {
           return { message: "Неправильный пароль" };
@@ -71,25 +75,24 @@ class UserService {
       throw new Error(`Ошибка при входе: ${error}`);
     }
   }
-  async logout(refreshToken) {
-    const token = await tokenService.removeToken(refreshToken);
+  async logout(refreshtoken) {
+    const token = await tokenService.removeToken(refreshtoken);
     return token;
   }
-  async refresh(refreshToken) {
-    if (!refreshToken) {
+  async refresh(refreshtoken) {
+    if (!refreshtoken) {
       throw ApiError.UnauthorizedError();
     }
-    const userData = tokenService.validateRefreshToken(refreshToken);
-    const tokenFromDb = await tokenService.findToken(refreshToken);
+    const userData = tokenService.validateRefreshToken(refreshtoken);
+    const tokenFromDb = await tokenService.findToken(refreshtoken);
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
     }
-    const user_id = await userModel.findByPk(userData.id);
-
-    const tokens = tokenService.generateToken(user_id);
-    await tokenService.saveToken(user_id, tokens.refreshToken);
-
-    return { ...tokens, user: user_id };
+    const user = await userModel.findByPk(userData.id);
+    const userDto = new UserDto(user);
+    const tokens = tokenService.generateToken({ ...userDto });
+    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    return { ...tokens, user: userDto };
   }
 }
 
