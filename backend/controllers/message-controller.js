@@ -17,8 +17,8 @@ class MessageController {
   }
   async showMessages(req, res, next) {
     try {
-      const { chat_id } = req.body;
-      const message = await MessageService.showMessages(chat_id);
+      const { chat_id, user_id } = req.body;
+      const message = await MessageService.showMessages(user_id, chat_id);
       return res.json(message);
     } catch (error) {
       console.error("Ошибка при получении диалога");
