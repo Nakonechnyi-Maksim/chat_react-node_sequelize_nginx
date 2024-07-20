@@ -6,7 +6,7 @@ class ChatService {
       const checkChat = await Chats_members.findAll({
         where: { user_id: [user_id, chat_partner_id] },
       });
-      if (!checkChat) {
+      if (checkChat.length == 0) {
         const chat = await Chats.create({
           chat_name: "Личный",
           chat_type: "Личный",
@@ -18,7 +18,7 @@ class ChatService {
         ]);
         return { msg: "Чат создан" };
       }
-      return { msg: "Чат уже создан" };
+      return checkChat;
     } catch (error) {
       throw new Error("Ошибка сервиса при создании чата: ", error);
     }

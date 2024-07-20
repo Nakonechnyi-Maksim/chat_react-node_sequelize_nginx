@@ -3,10 +3,10 @@ const MessageService = require("../service/message-service");
 class MessageController {
   async createMessage(req, res, next) {
     try {
-      const { chat_id, sender_id, content } = req.body;
+      const { sender_id, partner_id, content } = req.body;
       const message = await MessageService.createMessage(
-        chat_id,
         sender_id,
+        partner_id,
         content
       );
       return res.json(message);
@@ -17,8 +17,8 @@ class MessageController {
   }
   async showMessages(req, res, next) {
     try {
-      const { chat_id, user_id } = req.body;
-      const message = await MessageService.showMessages(user_id, chat_id);
+      const { chat_partner_id, user_id } = req.body;
+      const message = await MessageService.showMessages(user_id, chat_partner_id);
       return res.json(message);
     } catch (error) {
       console.error("Ошибка при получении диалога");
