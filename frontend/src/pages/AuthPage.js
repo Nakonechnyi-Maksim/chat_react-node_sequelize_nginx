@@ -3,7 +3,7 @@ import "./AuthPage.css";
 import UserContext from "../context/UserContext";
 
 export default function AuthPage() {
-  const { setUser, isAuth, setIsAuth } = useContext(UserContext);
+  const { isAuth, setIsAuth } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [login, setLogin] = useState("");
@@ -21,7 +21,6 @@ export default function AuthPage() {
     });
     const res = await req.json();
     if (res) {
-      setUser(res);
       setIsAuth({
         refreshToken: res.refreshtoken,
         accessToken: res.accessToken,
@@ -47,7 +46,6 @@ export default function AuthPage() {
     });
     const res = await req.json();
     if (res) {
-      setUser(res);
       setIsAuth({
         refreshToken: res.refreshtoken,
         accessToken: res.accessToken,

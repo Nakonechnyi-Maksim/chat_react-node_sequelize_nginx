@@ -1,9 +1,15 @@
 .msgWrapper {
   font-size: 1.5em;
+}
+
+.myMsgs {
+  display: flex;
   align-self: flex-end;
 }
 
-.whoSent {
+.partnerMsgs {
+  display: flex;
+  align-self: flex-start;
 }
 .msg {
   background-color: white;

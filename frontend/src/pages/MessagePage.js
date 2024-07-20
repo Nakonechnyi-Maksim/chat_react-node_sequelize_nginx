@@ -9,7 +9,8 @@ export default function Message() {
   const { selectedChatId } = useContext(ChatContext);
   const { isAuth } = useContext(UserContext);
   const reqBody = JSON.stringify({
-    chat_id: selectedChatId,
+    user_id: isAuth.user_id,
+    chat_partner_id: selectedChatId,
   });
   const [val, setVal] = useState("");
   const [msgs, setMsgs] = useState([]);
@@ -40,14 +41,15 @@ export default function Message() {
 
   async function createMessage() {
     const reqBody = JSON.stringify({
-      chat_id: selectedChatId,
       sender_id: isAuth.user_id,
+      partner_id: selectedChatId,
       content: val,
     });
     const req = await fetch("http://176.100.124.148:5000/api/create-message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${isAuth.accessToken}`,
       },
       body: reqBody,
     });

@@ -22,6 +22,24 @@ export default function SideBar() {
       setUsers(res);
     })();
   }, [isAuth.accessToken]);
+
+  async function createChat(chat_partner_id) {
+    const reqBody = JSON.stringify({
+      user_id: isAuth.user_id,
+      chat_partner_id,
+    });
+    console.warn("Тело запрос для создания чата ", reqBody);
+    await fetch("http://176.100.124.148:5000/api/create-chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${isAuth.accessToken}`,
+      },
+      credentials: "include",
+      body: reqBody,
+    });
+  }
+
   // Тудушечка - Разобраться с сохранением состояния после перезагрузки
   return (
     <>
@@ -37,7 +55,10 @@ export default function SideBar() {
                   <Link
                     to={`/msg?chat_id=${el.id}`}
                     className="link"
-                    onClick={() => setSelectedChatId(el.id)}
+                    onClick={() => {
+                      setSelectedChatId(el.id);
+                      createChat(el.id);
+                    }}
                   >
                     <p>{el.username}</p>
                   </Link>

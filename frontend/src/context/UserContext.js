@@ -5,10 +5,11 @@ const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
   // Тудушечка - user можно не использовать а только isAuth
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
   const [isAuth, setIsAuth] = useState({
     refreshToken: null,
     accessToken: null,
+    user_id: null,
   });
 
   async function checkAuth() {
@@ -18,18 +19,19 @@ export const UserProvider = ({ children }) => {
         credentials: "include",
       });
       const res = await req.json();
-      console.warn("Токены ", res);
+      console.warn("Данные пользователя ", res);
       if (res.accessToken && res.refreshtoken) {
         setIsAuth({
           refreshToken: res.refreshtoken,
           accessToken: res.accessToken,
+          user_id: res.user.user_id,
         });
-        setUser(res.user);
-        Cookies.set("refreshtoken", res.refreshtoken, {
-          expires: 30,
-          secure: false,
-          sameSite: "lax",
-        });
+        // setUser(res.user);
+        // Cookies.set("refreshtoken", res.refreshtoken, {
+        //   expires: 30,
+        //   secure: false,
+        //   sameSite: "lax",
+        // });
       }
     } catch (error) {
       console.error("Ошибка при обновлении токена:", error);
@@ -38,7 +40,6 @@ export const UserProvider = ({ children }) => {
         refreshToken: null,
         accessToken: null,
       });
-      setUser(null);
     }
   }
 
@@ -51,7 +52,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, isAuth, setIsAuth }}>
+    <UserContext.Provider value={{ isAuth, setIsAuth }}>
       {children}
     </UserContext.Provider>
   );
