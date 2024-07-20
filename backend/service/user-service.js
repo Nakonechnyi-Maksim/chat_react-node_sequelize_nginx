@@ -71,6 +71,26 @@ class UserService {
       throw new Error(`Ошибка при входе: ${error}`);
     }
   }
+  async logout(refreshToken) {
+    const token = await tokenService.removeToken(refreshToken);
+    return token;
+  }
+  async refresh(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.UnauthorizedError();
+    }
+    const userData = tokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await tokenService.findToken(refreshToken);
+    if (!userData || !tokenFromDb) {
+      throw ApiError.UnauthorizedError();
+    }
+    const user_id = await userModel.findByPk(userData.id);
+
+    const tokens = tokenService.generateToken(user_id);
+    await tokenService.saveToken(user_id, tokens.refreshToken);
+
+    return { ...tokens, user: user_id };
+  }
 }
 
 module.exports = new UserService();
